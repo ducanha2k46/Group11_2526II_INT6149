@@ -3,162 +3,355 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Đánh Giá Tái Nhập Viện</title>
+    <title>Hệ Thống Đánh Giá Tái Nhập Viện - Nhóm 11</title>
+    <!-- Import Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
-            --bg-color: #f4f7f6;
+            --bg-color: #eef2f6;
             --card-bg: #ffffff;
-            --primary-blue: #2563eb;
-            --primary-hover: #1d4ed8;
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
-            --border-color: #e5e7eb;
-            --danger-bg: #fee2e2;
-            --danger-text: #b91c1c;
-            --safe-bg: #d1fae5;
-            --safe-text: #047857;
+            --primary: #0ea5e9; /* Light blue y tế */
+            --primary-dark: #0284c7;
+            --secondary: #334155;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --safe: #10b981;
+            --safe-bg: #f0fdf4;
+            --warning: #f59e0b;
         }
 
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 40px 20px; }
-        .container { max-width: 900px; margin: 0 auto; }
-        
-        /* Header */
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { color: #111827; margin-bottom: 5px; font-size: 28px; }
-        .header p { color: var(--text-muted); margin-top: 0; font-size: 15px; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            color: var(--text-main); 
+            margin: 0; 
+            padding: 0; 
+            /* Thêm ảnh nền y tế phủ lớp sương mờ màu xanh xám (overlay) để làm nổi bật các Card */
+            background: linear-gradient(rgba(238, 242, 246, 0.88), rgba(238, 242, 246, 0.95)), 
+                        url('https://cdn.prod.website-files.com/650c1bee516c4e723b11b29a/65206264927e177f8bd65950_651f6a5b0bcc2eb5956182ea_Top%252050%2520Healthcare%2520Companies%2520and%2520Their%2520Impact%2520on%2520the%2520Industry.webp?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Giữ ảnh cố định khi cuộn trang */
+        }
+
+        .container { 
+            max-width: 1100px; 
+            margin: 30px auto; 
+            padding: 0 20px; 
+        }
+
+        /* Navbar / Header */
+        .navbar {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .navbar h1 { margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 0.5px; }
+        .navbar h1 i { color: var(--primary); margin-right: 10px; }
+        .system-status { font-size: 14px; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 20px; display: flex; align-items: center; gap: 8px;}
+        .status-dot { width: 10px; height: 10px; background-color: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; animation: pulse 2s infinite; }
+
+        /* .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; } */
 
         /* Grid Layout */
-        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-        .card { background: var(--card-bg); padding: 25px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid var(--border-color); }
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 25px; }
+        .card { 
+            background: var(--card-bg); 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); 
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
         
-        /* Card Headers */
-        .card-title { font-size: 16px; color: var(--primary-blue); font-weight: 600; margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+        /* Viền màu trên đỉnh Card */
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; }
+        .card-patient::before { background-color: var(--primary); }
+        .card-history::before { background-color: var(--warning); }
+
+        .card-title { font-size: 18px; color: var(--secondary); margin-top: 0; margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 15px; display: flex; align-items: center; gap: 10px; }
 
         /* Forms */
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
-        input, select { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; box-sizing: border-box; font-size: 14px; color: var(--text-main); outline: none; transition: border-color 0.2s; }
-        input:focus, select:focus { border-color: var(--primary-blue); }
-
-        /* Button */
-        .btn-submit { width: 100%; padding: 14px; background-color: var(--primary-blue); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background-color 0.2s; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2); }
-        .btn-submit:hover { background-color: var(--primary-hover); }
-
-        /* Result Area */
-        #result-box { margin-top: 20px; padding: 20px; border-radius: 8px; text-align: center; display: none; border: 1px solid transparent; }
-        .result-title { font-size: 16px; font-weight: bold; margin-bottom: 10px; }
-        .result-score { font-size: 32px; font-weight: bold; margin: 0; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 14px; font-weight: 500; color: var(--secondary); margin-bottom: 8px; }
         
-        .danger { background-color: var(--danger-bg); border-color: #fca5a5 !important; color: var(--danger-text); }
-        .safe { background-color: var(--safe-bg); border-color: #6ee7b7 !important; color: var(--safe-text); }
-        .error { background-color: #f3f4f6; border-color: #d1d5db !important; color: #374151; }
+        .input-group { position: relative; }
+        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        input, select { 
+            width: 100%; 
+            padding: 12px 15px 12px 40px; 
+            border: 1px solid var(--border); 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-size: 15px; 
+            font-family: inherit;
+            color: var(--text-main); 
+            background-color: #f8fafc;
+            transition: all 0.3s; 
+            outline: none;
+        }
+        input:focus, select:focus { border-color: var(--primary); background-color: #fff; box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15); }
 
-        /* Responsive */
-        @media (max-width: 768px) { .grid-container { grid-template-columns: 1fr; } }
+        /* AI Button */
+        .btn-ai { 
+            width: 100%; 
+            padding: 18px; 
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white; 
+            border: none; 
+            border-radius: 10px; 
+            font-size: 18px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: transform 0.2s, box-shadow 0.2s; 
+            box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.3); 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-ai:hover { transform: translateY(-2px); box-shadow: 0 15px 20px -3px rgba(14, 165, 233, 0.4); }
+        .btn-ai:active { transform: translateY(0); }
+        .btn-ai:disabled { background: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        /* AI Result Engine Panel */
+        .ai-engine-panel {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 25px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            display: none;
+            text-align: center;
+        }
+        .ai-title { font-size: 20px; font-weight: 700; margin-bottom: 15px; }
+        
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 24px;
+            background-color: #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 20px 0;
+            position: relative;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%; /* Sẽ được JS update */
+            border-radius: 12px;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: right;
+            padding-right: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .risk-score-text { font-size: 48px; font-weight: 800; margin: 10px 0; }
+        .risk-label { font-size: 16px; font-weight: 600; padding: 5px 15px; border-radius: 20px; display: inline-block; }
+
+        /* States */
+        .state-danger .progress-bar { background: linear-gradient(90deg, #f87171, #ef4444); }
+        .state-danger .risk-score-text { color: var(--danger); }
+        .state-danger .risk-label { background-color: var(--danger-bg); color: var(--danger); }
+
+        .state-safe .progress-bar { background: linear-gradient(90deg, #34d399, #10b981); }
+        .state-safe .risk-score-text { color: var(--safe); }
+        .state-safe .risk-label { background-color: var(--safe-bg); color: var(--safe); }
+
+        /* Animations */
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .fa-spin-custom { animation: spin 1s linear infinite; }
+
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>🏥 Hệ Thống Đánh Giá Tái Nhập Viện</h1>
+<!-- Navbar -->
+<div class="navbar">
+    <h1><i class="fa-solid fa-truck-medical"></i> CDSS - Tiên lượng rủi ro tái nhập viện</h1>
+    <div class="system-status">
+        <div class="status-dot"></div>
+        Spark Cluster: Connected
     </div>
+</div>
 
-    <div class="grid-container">
-        <!-- Cột Trái -->
-        <div class="card">
-            <h3 class="card-title">👤 Thông tin bệnh nhân</h3>
+<div class="container">
+    <div class="dashboard-grid">
+        
+        <!-- Cột Trái: Hồ sơ hiện tại -->
+        <div class="card card-patient">
+            <h3 class="card-title"><i class="fa-solid fa-hospital-user"></i> Hồ Sơ Bệnh Nhân & Đợt Điều Trị</h3>
             
             <div class="form-row">
-                <div>
+                <div class="form-group">
                     <label>Độ tuổi (Age)</label>
-                    <input type="number" id="age_group" value="80">
+                    <div class="input-group">
+                        <i class="fa-solid fa-person-cane"></i>
+                        <input type="number" id="age_group" value="80" min="0" max="120">
+                    </div>
                 </div>
-                <div>
+                <div class="form-group">
                     <label>Giới tính</label>
-                    <select id="gender">
-                        <option value="Female">Nữ</option>
-                        <option value="Male">Nam</option>
-                    </select>
+                    <div class="input-group">
+                        <i class="fa-solid fa-venus-mars"></i>
+                        <select id="gender">
+                            <option value="Female">Nữ</option>
+                            <option value="Male">Nam</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Nhóm chủng tộc (Race)</label>
-                <select id="race">
-                    <option value="Asian">Asian (Châu Á)</option>
-                    <option value="Caucasian">Caucasian (Da trắng)</option>
-                    <option value="AfricanAmerican">AfricanAmerican (Da màu)</option>
-                    <option value="Other">Khác</option>
-                </select>
+                <div class="input-group">
+                    <i class="fa-solid fa-earth-asia"></i>
+                    <select id="race">
+                        <option value="Asian">Asian (Châu Á)</option>
+                        <option value="Caucasian">Caucasian (Da trắng)</option>
+                        <option value="AfricanAmerican">AfricanAmerican (Da màu)</option>
+                        <option value="Other">Khác</option>
+                    </select>
+                </div>
             </div>
 
-            <h3 class="card-title" style="margin-top: 30px;">🛌 Đợt điều trị hiện tại</h3>
-            
-            <div class="form-group">
-                <label>Thời gian nằm viện (Ngày)</label>
-                <input type="number" id="time_in_hospital" value="20">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Thời gian nằm viện (Ngày)</label>
+                    <div class="input-group">
+                        <i class="fa-solid fa-bed-pulse"></i>
+                        <input type="number" id="time_in_hospital" value="20">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Số xét nghiệm đã làm</label>
+                    <div class="input-group">
+                        <i class="fa-solid fa-vial-virus"></i>
+                        <input type="number" id="num_lab_procedures" value="200">
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label>Số lượng xét nghiệm đã làm</label>
-                <input type="number" id="num_lab_procedures" value="200">
-            </div>
-
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 0;">
                 <label>Tình trạng lúc xuất viện</label>
-                <select id="discharge_disposition_id_cat">
-                    <option value="1">Về nhà bình thường (Discharged to home)</option>
-                    <option value="6">Cần y tá chăm sóc tại nhà</option>
-                    <option value="3">Chuyển sang cơ sở y tế khác</option>
-                </select>
+                <div class="input-group">
+                    <i class="fa-solid fa-file-medical"></i>
+                    <select id="discharge_disposition_id_cat">
+                        <option value="1">Về nhà bình thường (Discharged to home)</option>
+                        <option value="6">Cần y tá chăm sóc tại nhà</option>
+                        <option value="3">Chuyển sang cơ sở y tế khác</option>
+                    </select>
+                </div>
             </div>
         </div>
 
-        <!-- Cột Phải -->
-        <div class="card">
-            <h3 class="card-title">📄 Lịch sử y tế (1 năm qua)</h3>
+        <!-- Cột Phải: Lịch sử -->
+        <div class="card card-history">
+            <h3 class="card-title"><i class="fa-solid fa-notes-medical"></i> Lịch Sử Y Tế (12 Tháng Qua)</h3>
             
             <div class="form-group">
-                <label>Số lần nhập viện nội trú (Inpatient Visits)</label>
-                <input type="number" id="number_inpatient" value="5">
+                <label>Số lần nhập viện nội trú (Inpatient)</label>
+                <div class="input-group">
+                    <i class="fa-solid fa-hospital"></i>
+                    <input type="number" id="number_inpatient" value="5">
+                </div>
             </div>
 
             <div class="form-group">
-                <label>Số lần đi cấp cứu (Emergency Visits)</label>
-                <input type="number" id="number_emergency" value="20">
+                <label>Số lần đi cấp cứu (Emergency)</label>
+                <div class="input-group">
+                    <i class="fa-solid fa-truck-fast"></i>
+                    <input type="number" id="number_emergency" value="20">
+                </div>
             </div>
 
             <div class="form-group">
-                <label>Số lần khám ngoại trú (Outpatient Visits)</label>
-                <input type="number" id="number_outpatient" value="3">
+                <label>Số lần khám ngoại trú (Outpatient)</label>
+                <div class="input-group">
+                    <i class="fa-solid fa-stethoscope"></i>
+                    <input type="number" id="number_outpatient" value="3">
+                </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 0;">
                 <label>Tổng số chẩn đoán bệnh nền (Diagnoses)</label>
-                <input type="number" id="number_diagnoses" value="24">
+                <div class="input-group">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    <input type="number" id="number_diagnoses" value="24">
+                </div>
             </div>
         </div>
     </div>
 
-    <button class="btn-submit" onclick="predict()">⚙️ Phân tích rủi ro bằng AI</button>
+    <!-- Nút Kích hoạt AI -->
+    <button id="btn-predict" class="btn-ai" onclick="predict()">
+        <i id="btn-icon" class="fa-solid fa-microchip"></i> 
+        <span id="btn-text">Phân Tích Bằng Mô Hình Random Forest</span>
+    </button>
 
-    <div id="result-box">
-        <div id="result-title" class="result-title"></div>
-        <p id="result-score" class="result-score"></p>
-        <p id="error-log" style="font-size: 12px; margin-top: 10px; font-weight: normal; color: red;"></p>
+    <!-- Bảng Kết Quả AI -->
+    <div id="ai-engine-panel" class="ai-engine-panel">
+        <div class="ai-title" id="result-title">Báo Cáo Phân Tích Rủi Ro</div>
+        
+        <div class="progress-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+        
+        <div class="risk-score-text" id="risk-score">0%</div>
+        <div class="risk-label" id="risk-label">Chờ phân tích</div>
+        
+        <div id="extra-info" style="display: none; margin-top: 25px; text-align: left; animation: fadeIn 1s ease-in-out;">
+            <hr style="border: 0; height: 1px; background: var(--border); margin: 0 0 20px 0;">
+            
+            <h4 style="margin: 0 0 10px 0; color: var(--secondary); font-size: 15px;">
+                <i class="fa-solid fa-magnifying-glass-chart" style="color: var(--warning);"></i> Trích xuất yếu tố nguy cơ:
+            </h4>
+            <ul id="risk-factors" style="font-size: 14px; color: var(--text-muted); padding-left: 20px; margin-bottom: 20px; line-height: 1.6;">
+                <!-- JS sẽ tự động điền vào đây -->
+            </ul>
+
+            <h4 style="margin: 0 0 10px 0; color: var(--secondary); font-size: 15px;">
+                <i class="fa-solid fa-user-doctor" style="color: var(--primary);"></i> Đề xuất cho bác sĩ:
+            </h4>
+            <div id="clinical-advice" style="font-size: 14px; color: var(--text-main); background: rgba(14, 165, 233, 0.08); padding: 12px 16px; border-radius: 8px; border-left: 4px solid var(--primary); line-height: 1.5;">
+                <!-- JS sẽ tự động điền vào đây -->
+            </div>
+        </div>
+
+        <p id="error-log" style="font-size: 13px; margin-top: 15px; color: var(--danger); font-family: monospace;"></p>
     </div>
+
 </div>
 
 <script>
     async function predict() {
-        const resultBox = document.getElementById('result-box');
-        const resultTitle = document.getElementById('result-title');
-        const resultScore = document.getElementById('result-score');
+        // Elements
+        const btn = document.getElementById('btn-predict');
+        const btnIcon = document.getElementById('btn-icon');
+        const btnText = document.getElementById('btn-text');
+        const panel = document.getElementById('ai-engine-panel');
+        const progressBar = document.getElementById('progress-bar');
+        const riskScoreText = document.getElementById('risk-score');
+        const riskLabel = document.getElementById('risk-label');
         const errorLog = document.getElementById('error-log');
 
-        // Lấy và ép kiểu dữ liệu
+        // Lấy dữ liệu (Mã JS giữ nguyên 100% logic của bạn)
         const payload = {
             age_group: parseFloat(document.getElementById('age_group').value),
             gender: document.getElementById('gender').value,
@@ -172,11 +365,17 @@
             number_diagnoses: parseFloat(document.getElementById('number_diagnoses').value)
         };
 
-        resultBox.style.display = 'block';
-        resultBox.className = '';
+        // UI Loading State
+        btn.disabled = true;
+        btnIcon.className = 'fa-solid fa-spinner fa-spin-custom';
+        btnText.innerText = 'Đang phân tích qua Spark Pipeline...';
+        
+        panel.style.display = 'block';
+        panel.className = 'ai-engine-panel'; // reset
+        progressBar.style.width = '0%';
+        riskScoreText.innerText = '---';
+        riskLabel.innerText = 'Đang trích xuất đặc trưng...';
         errorLog.innerText = '';
-        resultTitle.innerText = '⏳ Đang phân tích trên cụm Spark...';
-        resultScore.innerText = '';
 
         try {
             const res = await fetch('/predict', {
@@ -186,27 +385,90 @@
             });
             const data = await res.json();
 
+            // Khôi phục nút bấm
+            btn.disabled = false;
+            btnIcon.className = 'fa-solid fa-microchip';
+            btnText.innerText = 'Phân Tích Lại';
+
             if (data.status === "success") {
-                if (data.prediction === 1) {
-                    resultTitle.innerHTML = '⚠️ NGUY CƠ CAO (Dự báo Tái nhập viện)';
-                    resultScore.innerText = data.risk_score + '%';
-                    resultBox.className = 'danger';
-                } else {
-                    resultTitle.innerHTML = '✅ AN TOÀN (Rủi ro thấp)';
-                    resultScore.innerText = data.risk_score + '%';
-                    resultBox.className = 'safe';
+                const score = data.risk_score;
+                animateValue(riskScoreText, 0, score, 1500);
+                
+                setTimeout(() => { progressBar.style.width = score + '%'; }, 100);
+
+                // --- BẮT ĐẦU PHẦN LOGIC MỚI ---
+                const extraInfo = document.getElementById('extra-info');
+                const riskFactorsList = document.getElementById('risk-factors');
+                const clinicalAdvice = document.getElementById('clinical-advice');
+                
+                // 1. Phân tích các cờ đỏ (Red Flags) từ dữ liệu đầu vào
+                let factorsHTML = "";
+                if (payload.number_inpatient >= 3) {
+                    factorsHTML += `<li><strong>Tiền sử nội trú dày đặc:</strong> Bệnh nhân đã nhập viện ${payload.number_inpatient} lần trong năm qua.</li>`;
                 }
+                if (payload.number_diagnoses > 15) {
+                    factorsHTML += `<li><strong>Đa bệnh nền phức tạp:</strong> Ghi nhận tới ${payload.number_diagnoses} mã chẩn đoán khác nhau.</li>`;
+                }
+                if (payload.time_in_hospital > 10) {
+                    factorsHTML += `<li><strong>Lưu viện dài ngày:</strong> Đợt điều trị hiện tại kéo dài ${payload.time_in_hospital} ngày, nguy cơ nhiễm trùng chéo.</li>`;
+                }
+                if (payload.discharge_disposition_id_cat !== "1") {
+                    factorsHTML += `<li><strong>Thể trạng xuất viện yếu:</strong> Bệnh nhân không thể tự chăm sóc, cần chuyển cơ sở hoặc y tá hỗ trợ.</li>`;
+                }
+                if (factorsHTML === "") {
+                    factorsHTML = `<li>Không phát hiện yếu tố rủi ro bất thường từ lịch sử y tế.</li>`;
+                }
+                riskFactorsList.innerHTML = factorsHTML;
+
+                // 2. Gán nhãn và đưa ra lời khuyên lâm sàng
+                if (data.prediction === 1) {
+                    panel.classList.add('state-danger');
+                    riskLabel.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> CẢNH BÁO: Rủi ro tái nhập viện cao';
+                    clinicalAdvice.innerHTML = "<strong>Cần hành động:</strong> Không nên cho xuất viện ngay. Đề xuất chuyển bệnh nhân sang khu vực theo dõi tích cực (Step-down unit). Nếu bắt buộc xuất viện, yêu cầu sắp xếp y tá thăm khám tại nhà trong vòng 48h và lên lịch tái khám bắt buộc sau 7 ngày.";
+                    clinicalAdvice.style.borderLeftColor = "var(--danger)";
+                    clinicalAdvice.style.background = "var(--danger-bg)";
+                } else {
+                    panel.classList.add('state-safe');
+                    riskLabel.innerHTML = '<i class="fa-solid fa-check-circle"></i> Bệnh nhân đủ điều kiện xuất viện an toàn';
+                    clinicalAdvice.innerHTML = "<strong>Kế hoạch:</strong> Bệnh nhân đáp ứng tốt với đợt điều trị. Có thể tiến hành thủ tục xuất viện theo phác đồ thông thường. Cung cấp tài liệu giáo dục sức khỏe và hướng dẫn sử dụng thuốc tại nhà.";
+                    clinicalAdvice.style.borderLeftColor = "var(--safe)";
+                    clinicalAdvice.style.background = "var(--safe-bg)";
+                }
+                
+                // Hiển thị khung thông tin sau 1.5 giây (Chờ thanh phần trăm chạy xong)
+                setTimeout(() => {
+                    extraInfo.style.display = "block";
+                }, 1500);
+                // --- KẾT THÚC PHẦN LOGIC MỚI ---
+
             } else {
-                resultBox.className = 'error';
-                resultTitle.innerText = '❌ Lỗi xử lý mô hình!';
-                // Dòng này cực kỳ quan trọng để bạn biết Spark đang lỗi ở cột nào:
-                errorLog.innerText = 'Chi tiết lỗi từ Spark: ' + data.message; 
-                console.error(data.message);
+                panel.classList.add('state-danger');
+                riskLabel.innerText = 'Lỗi Tính Toán';
+                errorLog.innerText = 'Log: ' + data.message; 
             }
         } catch (e) {
-            resultBox.className = 'error';
-            resultTitle.innerText = '❌ Mất kết nối tới Server API!';
+            btn.disabled = false;
+            btnIcon.className = 'fa-solid fa-microchip';
+            btnText.innerText = 'Phân Tích Lại';
+            
+            panel.classList.add('state-danger');
+            riskLabel.innerText = 'Mất kết nối tới máy chủ Spark';
+            errorLog.innerText = 'Chi tiết: Vui lòng kiểm tra Uvicorn server đang chạy.';
         }
+    }
+
+    // Hàm tạo hiệu ứng chạy số cho phần trăm cực đẹp
+    function animateValue(obj, start, end, duration) {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            obj.innerHTML = (progress * (end - start)).toFixed(2) + '%';
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            }
+        };
+        window.requestAnimationFrame(step);
     }
 </script>
 
