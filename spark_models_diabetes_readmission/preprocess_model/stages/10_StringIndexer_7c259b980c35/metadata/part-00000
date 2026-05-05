@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.StringIndexerModel","timestamp":1777916845068,"sparkVersion":"3.5.1","uid":"StringIndexer_7c259b980c35","paramMap":{"inputCol":"glimepiride","handleInvalid":"keep","outputCol":"glimepiride_idx"},"defaultParamMap":{"stringOrderType":"frequencyDesc","handleInvalid":"error","outputCol":"StringIndexer_7c259b980c35__output"}}
