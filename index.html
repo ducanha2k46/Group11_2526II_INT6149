@@ -203,7 +203,7 @@
                     <label>Độ tuổi (Age)</label>
                     <div class="input-group">
                         <i class="fa-solid fa-person-cane"></i>
-                        <input type="number" id="age_group" value="80" min="0" max="120">
+                        <input type="number" id="age_group" placeholder="VD: 80" min="0" max="120">
                     </div>
                 </div>
                 <div class="form-group">
@@ -211,6 +211,7 @@
                     <div class="input-group">
                         <i class="fa-solid fa-venus-mars"></i>
                         <select id="gender">
+                            <option value="" disabled selected>-- Chọn giới tính --</option>
                             <option value="Female">Nữ</option>
                             <option value="Male">Nam</option>
                         </select>
@@ -223,6 +224,7 @@
                 <div class="input-group">
                     <i class="fa-solid fa-earth-asia"></i>
                     <select id="race">
+                        <option value="" disabled selected>-- Chọn chủng tộc --</option>
                         <option value="Asian">Asian (Châu Á)</option>
                         <option value="Caucasian">Caucasian (Da trắng)</option>
                         <option value="AfricanAmerican">AfricanAmerican (Da màu)</option>
@@ -236,14 +238,14 @@
                     <label>Thời gian nằm viện (Ngày)</label>
                     <div class="input-group">
                         <i class="fa-solid fa-bed-pulse"></i>
-                        <input type="number" id="time_in_hospital" value="20">
+                        <input type="number" id="time_in_hospital" placeholder="VD: 20">
                     </div>
                 </div>
                 <div class="form-group">
                     <label>Số xét nghiệm đã làm</label>
                     <div class="input-group">
                         <i class="fa-solid fa-vial-virus"></i>
-                        <input type="number" id="num_lab_procedures" value="200">
+                        <input type="number" id="num_lab_procedures" placeholder="VD: 200">
                     </div>
                 </div>
             </div>
@@ -253,6 +255,7 @@
                 <div class="input-group">
                     <i class="fa-solid fa-file-medical"></i>
                     <select id="discharge_disposition_id_cat">
+                        <option value="" disabled selected>-- Chọn tình trạng --</option>
                         <option value="1">Về nhà bình thường (Discharged to home)</option>
                         <option value="6">Cần y tá chăm sóc tại nhà</option>
                         <option value="3">Chuyển sang cơ sở y tế khác</option>
@@ -269,7 +272,7 @@
                 <label>Số lần nhập viện nội trú (Inpatient)</label>
                 <div class="input-group">
                     <i class="fa-solid fa-hospital"></i>
-                    <input type="number" id="number_inpatient" value="5">
+                    <input type="number" id="number_inpatient" placeholder="VD: 5">
                 </div>
             </div>
 
@@ -277,7 +280,7 @@
                 <label>Số lần đi cấp cứu (Emergency)</label>
                 <div class="input-group">
                     <i class="fa-solid fa-truck-fast"></i>
-                    <input type="number" id="number_emergency" value="20">
+                    <input type="number" id="number_emergency" placeholder="VD: 20">
                 </div>
             </div>
 
@@ -285,7 +288,7 @@
                 <label>Số lần khám ngoại trú (Outpatient)</label>
                 <div class="input-group">
                     <i class="fa-solid fa-stethoscope"></i>
-                    <input type="number" id="number_outpatient" value="3">
+                    <input type="number" id="number_outpatient" placeholder="VD: 3">
                 </div>
             </div>
 
@@ -293,7 +296,7 @@
                 <label>Tổng số chẩn đoán bệnh nền (Diagnoses)</label>
                 <div class="input-group">
                     <i class="fa-solid fa-clipboard-list"></i>
-                    <input type="number" id="number_diagnoses" value="24">
+                    <input type="number" id="number_diagnoses" placeholder="VD: 24">
                 </div>
             </div>
         </div>
@@ -302,7 +305,7 @@
     <!-- Nút Kích hoạt AI -->
     <button id="btn-predict" class="btn-ai" onclick="predict()">
         <i id="btn-icon" class="fa-solid fa-microchip"></i> 
-        <span id="btn-text">Phân Tích Bằng Mô Hình Random Forest</span>
+        <span id="btn-text">Phân Tích</span>
     </button>
 
     <!-- Bảng Kết Quả AI -->
@@ -336,7 +339,6 @@
 
         <p id="error-log" style="font-size: 13px; margin-top: 15px; color: var(--danger); font-family: monospace;"></p>
     </div>
-
 </div>
 
 <script>
